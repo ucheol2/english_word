@@ -106,7 +106,10 @@ $(document).ready(function(){
     var step = $(this).attr("view_step");
     $('.word_meaning[answer_step="'+step+'"]').hide();
   });
-  
+  $(document).on('touchend', '.view_answer', function(){
+    var step = $(this).attr("view_step");
+    $('.word_meaning[answer_step="'+step+'"]').hide();
+  });
   // 맞춤
   $(document).on('click', '.correct', function(){
     var step_block = $(this).parent();
