@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>영단어를 외우자</title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+  
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/css/materialize.min.css">
+
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.3/js/materialize.min.js"></script>
+  
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  
+</head>
+<body>
+
+<div class="navbar-fixed">
+  <nav class="yellow">
+    <div class="nav-wrapper">
+      <a href="/" class="brand-logo black-text">단어 암기er</a>
+      <ul class="right hide-on-med-and-down">
+        <li><a class="black-text" href="/">홈</a></li>
+        <% if user_signed_in? %>
+          <li><a class="black-text" href="/voca/index">외우기</a></li>
+          <li><a class="black-text" href="/voca/manage">단어 관리</a></li>
+          <li><%= link_to "로긘아웃", destroy_user_session_path , method: "delete", class: "black-text" %></li>
+        <% else %>
+          <li><%= link_to "로긘", new_user_session_path, class: "black-text" %></li>
+        <% end %>
+      </ul>
+    </div>
+  </nav>
+</div>
+
+<div class="container-fluid">
+  <div class="center">
+    <p class="notice"><%= notice %></p>
+    <p class="alert"><%= alert %></p>
+  </div>
+  <%= yield %>
+</div>
+
+<footer class="page-footer yellow">
+  <div class="container">
+    <div class="row">
+      <div class="col l6 s12">
+        <h5 class="black-text">영단어를 외우자</h5>
+        <p class="grey-text text-darken-4">정유철이 만듦</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer-copyright">
+    <div class="container black-text">
+    © 2014 Copyright Text
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

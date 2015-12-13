@@ -1,0 +1,21 @@
+<style>
+html { 
+  background: url("/images/background.jpg") no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+</style>
+
+<div class="center">
+  <h1 style="margin: 1em; padding: 1em; border-radius: 0.5em; background-color: rgba(255,255,255,0.4)">단어 암기er</h1>
+  <div style="margin-bottom: 5em;">
+  <% if user_signed_in? %>
+    <a href="/voca/index" class="waves-effect waves-darken btn-large yellow black-text">외우기</a> &nbsp <a href="/voca/manage" class="waves-effect waves-darken btn-large yellow black-text">단어 관리</a><br><br>
+    <%= link_to "로긘아웃", destroy_user_session_path , method: "delete", class: "waves-effect waves-darken btn-large yellow black-text" %>
+  <% else %>
+    <%= link_to "로긘", new_user_session_path, class: "waves-effect waves-darken btn-large yellow black-text" %>
+  <% end %>
+  </div>
+</div>

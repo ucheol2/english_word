@@ -1,0 +1,74 @@
+<div class="container-fluid">
+  <h1 class="center">내 단어 관리</h1>
+  
+  <div class="row" style="margin: 0.7em;">
+    <%= form_tag "/voca/create", method: "post", class: "col s12 word_register" do %>
+      <h5>단어 추가</h5>
+      <div class="row">
+        <div class="input-field col s12 l5">
+          <input placeholder="ex) word" id="letter" type="text" class="validate" name="letter" required>
+          <label class="my_label" for="letter">단어</label>
+        </div>
+        <div class="input-field col s9 l5">
+          <input placeholder="ex) n. 단어, 낱말" id="meaning" type="text" class="validate" name="meaning" required>
+          <label class="my_label" for="meaning">뜻</label>
+        </div>
+        <div class="input-field col s3 l2">
+          <input id="day" type="number" class="validate" name="day" value="<%= params[:id] %>" required>
+          <label class="my_label" for="day">Day</label>
+        </div>
+      </div>
+      <button class="btn waves-effect waves-light right yellow black-text" type="submit" name="action">작성
+        <i class="material-icons right">mode_edit</i>
+      </button>
+    <% end %>
+  </div>
+  
+  <div class="row center">
+    <a href="/voca/index" class="waves-effect waves-darken btn yellow black-text">외우기로 돌아가기</a>
+  </div>
+  
+  <div class="row">
+    <div class="col s12">
+      <h5>단어 목록 (<span id="word_count"><%= current_user.vocas.count %></span>)</h5>
+    </div>
+    <div id="word_list" class="col s12 collection">
+      <% @voca.reverse.each do |item| %>
+        <a class="collection-item word_element"><%= item.word%><span class="division">|</span><%= item.meaning %><span class="division">|</span>Day: <%= item.day %><span id="<%= item.id %>" class="right delete_btn">X</span></a>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script>
+$(document).ready(function(){
+  $("#letter").focus();
+  $(document).on('click', '.delete_btn', function(){
+    var r = confirm("정말 삭제하시겠습니까?");
+    list = $(this).parent().parent();
+    $('#word_list').height($('#word_list').height());
+    if (r == true) {
+      $.ajax({
+        url: "/voca/delete_voca",
+        dataType: 'json',
+        data: {
+          id: $(this).attr('id')
+        },
+        success: function(data){
+          list.empty();
+          $('#word_list').height('auto');
+          $(data).each(function(){
+            list.append('<a class="collection-item word_element">'+this.word+'<span class="division">|</span>'+this.meaning+'<span class="division">|</span>Day: '+this.day+'<span id="'+this.id+'" class="right delete_btn">X</span></a>');
+          });
+          $('#word_count').text($(data).length);
+        },
+        error: function(request,status,error){
+          list.empty();
+          list.append("에러가 발생했습니다. 다시 시도해 주세요<br>"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+          $('#word_list').height('auto');
+        }
+      });
+    };
+  });
+});
+</script>

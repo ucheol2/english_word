@@ -1,0 +1,240 @@
+<div class="row">
+  <div class="col l2 hide-on-small-only">&nbsp</div>
+  <div class="col s12 l8">
+    <h1>단어를 맞춰보자!</h1>
+    
+    <div class="row">
+    <%= form_tag "/voca/index", class: "col s12", method: "get" %>
+      <div class="row">
+        <div class="input-field col s12 l8">
+          <input placeholder="전체 단어를 외우시려면 0을 입력하세요" id="day" type="number" name="day" class="validate" value="<%= params[:day] %>">
+          <label class="my_label" for="first_name">Day</label>
+        </div>
+        <div class="input-field col s12 l4">
+          <button class="btn waves-effect waves-light yellow black-text" type="submit">외우기</button>
+        </div>
+      </div>
+    </form>
+  </div>
+    
+    <ul class="collapsible" data-collapsible="accordion">
+      <% for i in 1..4 do %>
+        <li>
+          <div class="collapsible-header active"><h3><i class="material-icons"><%= @icons[i-1] %></i><%= i %>단계 (<span id="stepcnt_<%= i %>"><%= @vocas[i].count %></span>) | <span style="font-size: 0.5em; color: grey;"><%= ((Time.now - @history[i-1])/1.day).to_i %>일 전에 확인함</span></h3></div>
+          <div class="collapsible-body">
+            <% if @vocas[i].count != 0 %>
+              <% voca = @vocas[i].sample %>
+              <p step="<%= i %>" word_id="<%= voca.id %>">
+                <span class="word_letter"><%= voca.word %></span> <span answer_step="<%= i %>" class="word_meaning"><%= voca.meaning %></span><br><br>
+                <a view_step="<%= i %>" class="view_answer waves-effect waves-light btn"><i class="material-icons left">search</i>정답보기</a>
+                <a class="correct waves-effect waves-light btn blue"><i class="material-icons left">check</i>맞춤</a>
+                <a class="wrong waves-effect waves-light btn red"><i class="material-icons left">clear</i>틀림</a>
+                <a href="http://endic.naver.com/search.nhn?sLn=kr&searchOption=all&query=<%= voca.word %>" class="naver_dic waves-effect waves-light btn green" target="_blank"><i class="material-icons left">help</i>네이버사전</a>
+              </p>
+            <% else %>
+              <p step="<%= i %>">해당 단어가 없습니다.</p>
+            <% end %>
+          </div>
+        </li>
+      <% end %>
+      <li>
+        <div class="collapsible-header active"><h3><i class="material-icons">looks_5</i>5단계 (<span id="stepcnt_5"><%= @vocas[5].count %></span>) | <span style="font-size: 0.5em; color: grey;"><%= ((Time.now - @history[4])/1.day).to_i %>일 전에 확인함</span></h3></div>
+        <div class="collapsible-body">
+          <% if @vocas[5].count != 0 %>
+            <% voca = @vocas[5].sample %>
+            <p step="5" word_id="<%= voca.id %>">
+              <span class="word_letter"><%= voca.word %></span> <span answer_step="5" class="word_meaning"><%= voca.meaning %></span><br><br>
+              <a view_step="5" class="view_answer waves-effect waves-light btn"><i class="material-icons left">search</i>정답보기</a>
+              <a class="correct5 waves-effect waves-light btn blue"><i class="material-icons left">check</i>맞춤</a>
+              <a class="wrong waves-effect waves-light btn red"><i class="material-icons left">clear</i>틀림</a>
+              <a href="http://endic.naver.com/search.nhn?sLn=kr&searchOption=all&query=<%= voca.word %>" class="naver_dic waves-effect waves-light btn green" target="_blank"><i class="material-icons left">help</i>네이버사전</a>
+            </p>
+          <% else %>
+            <p step="5">해당 단어가 없습니다.</p>
+          <% end %>
+        </div>
+      </li>
+      <li>
+        <div class="collapsible-header"><h3><i class="material-icons">mood</i>정복 (<span id="stepcnt_6"><%= @vocas[6].count %></span>)</h3></div>
+        <div class="collapsible-body">
+          <p step="6">
+            <%= @vocas.flatten.count %>중 <span id="clearcnt"><%= @vocas[6].count %></span>개의 단어를 정복하셨습니다!<br>
+            아래 버튼으로 <b>모든 <%= @vocas.flatten.count %>개 단어를</b> 1단계로 되돌릴 수 있습니다.<br>
+            <%= link_to "/voca/reset_all/#{params[:day]}", class: "correct waves-effect waves-light btn yellow black-text", data: {confirm: "현재 모든 단어들이 1단계로 돌아갑니다"} do %>
+              <i class="material-icons left">replay</i>전부 리셋
+            <% end %>
+          </p>
+        </div>
+      </li>
+      <li>
+        <div class="collapsible-header"><h3><i class="material-icons">mood_bad</i>틀림 (<span id="stepcnt_0"><%= @vocas[0].count %></span>)</h3></div>
+        <div class="collapsible-body">
+          <p step="0">
+            <%= @vocas.flatten.count %>중 <span id="wrongcnt"><%= @vocas[0].count %></span>개의 단어를 틀리셨습니다!<br>
+            아래 버튼으로 틀린 단어들을 1단계로 되돌릴 수 있습니다.<br>
+            <%= link_to "/voca/reset_wrongs/#{params[:day]}", class: "correct waves-effect waves-light btn yellow black-text", data: {confirm: "현재 틀린 단어들이 1단계로 돌아갑니다"} do %>
+              <i class="material-icons left">replay</i>틀린 단어 리셋
+            <% end %>
+          </p>
+        </div>
+      </li>
+    </ul>
+    
+  </div>
+</div>
+
+<div class="center">
+  <a href="/voca/manage" class="waves-effect waves-darken btn-large yellow black-text">단어 전체 보기 & 관리</a><br><br>
+</div>
+
+<script>
+$(document).ready(function(){
+  
+  // 정답보기
+  $(document).on('mousedown', '.view_answer', function(){
+    var step = $(this).attr("view_step");
+    $('.word_meaning[answer_step="'+step+'"]').show();
+  });
+  $(document).on('mouseup', '.view_answer', function(){
+    var step = $(this).attr("view_step");
+    $('.word_meaning[answer_step="'+step+'"]').hide();
+  });
+  $(document).on('mouseleave', '.view_answer', function(){
+    var step = $(this).attr("view_step");
+    $('.word_meaning[answer_step="'+step+'"]').hide();
+  });
+  
+  // 맞춤
+  $(document).on('click', '.correct', function(){
+    var step_block = $(this).parent();
+    var curr_step = step_block.attr("step");
+    $.ajax({
+      url: "/voca/step_up",
+      dataType: 'json',
+      data: {
+        id: step_block.attr('word_id'),
+        day: <%= params[:day].to_i %>
+      },
+      success: function(data){
+        var curr_step_data = data[0];
+        $("#stepcnt_"+curr_step).text(curr_step_data.length);
+        
+        if (curr_step_data.length == 0) {
+          step_block.text("해당 단어가 없습니다");
+        }
+        else{
+          //현재 step에 새로운 단어 뿌리기
+          var new_word = curr_step_data[Math.floor(Math.random()*curr_step_data.length)];
+          step_block.attr('word_id',new_word.id);
+          step_block.children(".word_letter").text(new_word.word);
+          step_block.children(".word_meaning").text(new_word.meaning);
+          step_block.children(".naver_dic").attr('href',"http://endic.naver.com/search.nhn?sLn=kr&searchOption=all&query="+new_word.word);
+        }
+        //다음 step 관리
+        var next_step_data = data[1];
+        var next_step = parseInt(curr_step)+1;
+        $("#stepcnt_"+next_step).text(next_step_data.length);
+        
+        var new_word = next_step_data[Math.floor(Math.random()*next_step_data.length)];
+        var next_step_block = $('p[step="'+next_step+'"]').first();
+        next_step_block.attr('word_id',new_word.id);
+        next_step_block.empty();
+        if (next_step == 5) {
+          next_step_block.append(
+          '<span class="word_letter">'+new_word.word+'</span> <span answer_step="'+next_step+'" class="word_meaning">'+new_word.meaning+'</span><br><br>'+
+          '<a view_step="'+next_step+'" class="view_answer waves-effect waves-light btn"><i class="material-icons left">search</i>정답보기</a> '+
+          '<a class="correct5 waves-effect waves-light btn blue"><i class="material-icons left">check</i>맞춤</a> '+
+          '<a class="wrong waves-effect waves-light btn red"><i class="material-icons left">clear</i>틀림</a> '+
+          '<a href="http://endic.naver.com/search.nhn?sLn=kr&searchOption=all&query='+new_word.word+'" class="naver_dic waves-effect waves-light btn green" target="_blank"><i class="material-icons left">help</i>네이버사전</a>'
+          );
+        }
+        else {
+          next_step_block.append(
+          '<span class="word_letter">'+new_word.word+'</span> <span answer_step="'+next_step+'" class="word_meaning">'+new_word.meaning+'</span><br><br>'+
+          '<a view_step="'+next_step+'" class="view_answer waves-effect waves-light btn"><i class="material-icons left">search</i>정답보기</a> '+
+          '<a class="correct waves-effect waves-light btn blue"><i class="material-icons left">check</i>맞춤</a> '+
+          '<a class="wrong waves-effect waves-light btn red"><i class="material-icons left">clear</i>틀림</a> '+
+          '<a href="http://endic.naver.com/search.nhn?sLn=kr&searchOption=all&query='+new_word.word+'" class="naver_dic waves-effect waves-light btn green" target="_blank"><i class="material-icons left">help</i>네이버사전</a>'
+          );
+        }
+      },
+      error: function(request,status,error){
+        step_block.text("에러가 발생했습니다. 다시 시도해 주세요<br>"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+      }
+    });
+  });
+  $(document).on('click', '.correct5', function(){
+    var step_block = $(this).parent();
+    var curr_step = step_block.attr("step");
+    $.ajax({
+      url: "/voca/step_up",
+      dataType: 'json',
+      data: {
+        id: step_block.attr('word_id'),
+        day: <%= params[:day].to_i %>
+      },
+      success: function(data){
+        var curr_step_data = data[0];
+        $("#stepcnt_"+curr_step).text(curr_step_data.length);
+        
+        if (curr_step_data.length == 0) {
+          step_block.text("해당 단어가 없습니다");
+        }
+        else{
+          //현재 step에 새로운 단어 뿌리기
+          var new_word = curr_step_data[Math.floor(Math.random()*curr_step_data.length)];
+          step_block.attr('word_id',new_word.id);
+          step_block.children(".word_letter").text(new_word.word);
+          step_block.children(".word_meaning").text(new_word.meaning);
+          step_block.children(".naver_dic").attr('href',"http://endic.naver.com/search.nhn?sLn=kr&searchOption=all&query="+new_word.word);
+        }
+        //정복 step 관리
+        var next_step_data = data[1];
+        $("#stepcnt_6").text(next_step_data.length);
+        $("#clearcnt").text(next_step_data.length);
+      },
+      error: function(request,status,error){
+        step_block.text("에러가 발생했습니다. 다시 시도해 주세요<br>"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+      }
+    });
+  });
+  
+  //틀림
+  $(document).on('click', '.wrong', function(){
+    var step_block = $(this).parent();
+    var curr_step = step_block.attr("step");
+    $.ajax({
+      url: "/voca/step_down",
+      dataType: 'json',
+      data: {
+        id: step_block.attr('word_id'),
+        day: <%= params[:day].to_i %>
+      },
+      success: function(data){
+        var curr_step_data = data[0];
+        $("#stepcnt_"+curr_step).text(curr_step_data.length);
+        
+        if (curr_step_data.length == 0) {
+          step_block.text("해당 단어가 없습니다");
+        }
+        else{
+          //현재 step에 새로운 단어 뿌리기
+          var new_word = curr_step_data[Math.floor(Math.random()*curr_step_data.length)];
+          step_block.attr('word_id',new_word.id);
+          step_block.children(".word_letter").text(new_word.word);
+          step_block.children(".word_meaning").text(new_word.meaning);
+          step_block.children(".naver_dic").attr('href',"http://endic.naver.com/search.nhn?sLn=kr&searchOption=all&query="+new_word.word);
+        }
+        //틀림 step 관리
+        var wrong_step_data = data[1];
+        $("#stepcnt_0").text(wrong_step_data.length);
+        $("#wrongcnt").text(wrong_step_data.length);
+      },
+      error: function(request,status,error){
+        step_block.text("에러가 발생했습니다. 다시 시도해 주세요<br>"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+      }
+    });
+  });
+  
+});
+</script>
