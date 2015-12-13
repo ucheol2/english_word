@@ -94,6 +94,9 @@ $(document).ready(function(){
   $(document).on('mousedown', '.view_answer', function(){
     var step = $(this).attr("view_step");
     $('.word_meaning[answer_step="'+step+'"]').show();
+  });$(document).on('vmousedown', '.view_answer', function(){
+    var step = $(this).attr("view_step");
+    $('.word_meaning[answer_step="'+step+'"]').show();
   });
   $(document).on('mouseup', '.view_answer', function(){
     var step = $(this).attr("view_step");
