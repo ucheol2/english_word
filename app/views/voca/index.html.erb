@@ -60,7 +60,7 @@
           <p step="6">
             <%= @vocas.flatten.count %>중 <span id="clearcnt"><%= @vocas[6].count %></span>개의 단어를 정복하셨습니다!<br>
             아래 버튼으로 <b>모든 <%= @vocas.flatten.count %>개 단어를</b> 1단계로 되돌릴 수 있습니다.<br>
-            <%= link_to "/voca/reset_all/#{params[:day]}", class: "correct waves-effect waves-light btn yellow black-text", data: {confirm: "현재 모든 단어들이 1단계로 돌아갑니다"} do %>
+            <%= link_to "/voca/reset_all/#{params[:day]}", class: "waves-effect waves-light btn yellow black-text", data: {confirm: "현재 모든 단어들이 1단계로 돌아갑니다"} do %>
               <i class="material-icons left">replay</i>전부 리셋
             <% end %>
           </p>
@@ -72,7 +72,7 @@
           <p step="0">
             <%= @vocas.flatten.count %>중 <span id="wrongcnt"><%= @vocas[0].count %></span>개의 단어를 틀리셨습니다!<br>
             아래 버튼으로 틀린 단어들을 1단계로 되돌릴 수 있습니다.<br>
-            <%= link_to "/voca/reset_wrongs/#{params[:day]}", class: "correct waves-effect waves-light btn yellow black-text", data: {confirm: "현재 틀린 단어들이 1단계로 돌아갑니다"} do %>
+            <%= link_to "/voca/reset_wrongs/#{params[:day]}", class: "waves-effect waves-light btn yellow black-text", data: {confirm: "현재 틀린 단어들이 1단계로 돌아갑니다"} do %>
               <i class="material-icons left">replay</i>틀린 단어 리셋
             <% end %>
           </p>
