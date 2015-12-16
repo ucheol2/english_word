@@ -1,0 +1,3 @@
+<% @vocas.each do |item| %>
+  Voca.create(user_id: 1, word: <%= item.word %>, meaning: <%= item.meaning %>, step: <%= item.step%>, day: <%= item.day %>)<br>
+<% end %>

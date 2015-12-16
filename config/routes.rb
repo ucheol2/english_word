@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   
+  get 'backup/index'
+
   get 'voca/index'
 
   devise_for :users
